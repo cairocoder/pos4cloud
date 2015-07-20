@@ -1,0 +1,7 @@
+RewriteEngine On
+
+
+
+RewriteCond %{HTTP_HOST} ^(?:www\.)iravin\.com$ [NC]
+
+RewriteRule ^ http://www.pos4cloud.com%{REQUEST_URI} [L,R=301]

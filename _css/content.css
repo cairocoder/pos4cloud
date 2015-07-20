@@ -1,0 +1,808 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	background: #CCCCCC;
+	font-family: tahoma;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+textarea {resize:vertical} /* disable horizontal resize */
+
+/*-----------------------------------------*/
+
+#wrapper {
+	width: 1000px;
+	margin: 0 auto;
+	background: #ffffff;
+	padding: 10px;
+	box-shadow: 0 0 5px;
+}
+
+h1 {
+    background: none repeat scroll 0 0 #CCCCCC;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    margin: 0 0 2px;
+}
+
+#container {
+	width: 800px;
+	margin: 0 20px 0 0;
+	float: left;
+}
+
+#sidebar {
+	width: 180px;
+	float: left;
+	text-align: center;
+}
+
+#sidebar p {
+	padding: 20px;
+	display: block;
+}
+
+h2 {
+	background: none repeat scroll 0 0 darkgray;
+    float: left;
+    padding: 20px;
+    width: 140px;
+    height: 16px;
+	margin: 2px 0;
+	font-weight: bold;
+}
+
+#salesMen, #allBrances {
+	width: 90%;
+}
+
+#selProd, #selSize, #selQty, #downTemp {
+	height: 60px;
+}
+
+.clear {
+	clear: both;
+}
+
+#loadingWrapper {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: #fff;
+	z-index: 99999;
+	opacity: 0.5;
+	overflow: hidden;
+}
+
+#loading {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -50px;
+	margin-left: -50px;
+	width: 100px;
+	height: 100px;
+}
+
+#txtItems, #txtItems2, #uploadItems {
+	border: 1px solid #CCCCCC;
+    height: 30px;
+    margin: 10px 22px;
+    width: 230px;
+    font-size: 1.1em;
+}
+
+#downloadTemplate {
+	display: inline-block;
+    height: 30px;
+    margin: 20px 22px;
+    width: 230px;
+    font-size: 1.1em;
+}
+
+.ui-autocomplete {
+	max-height: 100px;
+	overflow: auto;
+}
+
+#tableSizes {
+	border-collapse: collapse;
+	text-align: center;
+	margin: 0 22px;
+	display: inline-block;
+}
+
+#tableSizes input[type="text"] {
+    width: 15px;
+    text-align: center;
+}
+
+td, th {
+	font-size: 0.9em;
+	border: 1px solid #CCCCCC;
+	padding: 3px;
+}
+
+th {
+	font-size: 1.1em;
+	text-align: left;
+	padding-top: 5px;
+	padding-bottom: 4px;
+	background-color: #BBBBBB;
+	color: #ffffff;
+	text-align: center;
+}
+
+th .thItemId {
+	min-width: 55px;
+}
+
+tr.alt td {
+	color:#000000;
+	background-color:#EAF2D3;
+}
+
+td {
+	vertical-align: middle;
+}
+
+#txtQty {
+	border: 1px solid #CCCCCC;
+    font-size: 1.1em;
+    height: 30px;
+    margin: 10px 22px;
+    width: 50px;
+    text-align: center;
+}
+
+#itemsWrapper {
+	border: 1px solid #CCCCCC;
+	min-height: 50px;
+	background: #eee;
+	margin: 2px 0;
+	max-height: 250px;
+	overflow: auto;
+}
+
+#tableItems {
+	border-collapse: collapse;
+	text-align: center;
+	width: 100%;
+}
+
+#invFooter {
+	padding: 15px 0;
+}
+
+#getCustomer {
+    float: left;
+}
+
+#priceCalc {
+    float: right;
+}
+
+.customerName {
+    background: none repeat scroll 0 0 #DDDDDD;
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+#btnProceed, #btnProceedE, #btnProceedR, #btnProceedT, #btnHoldT, #btnProceedT2, #btnHoldT2,
+#btnProceedST, #btnHoldSP {
+    display: inline-block;
+    float: right;
+    padding: 10px;
+}
+
+#btnPay, #btnReturn, #btnExchange {
+	padding: 10px;
+}
+
+.sizeId {
+	display: none;
+}
+
+.total, .toPay {
+	font-weight: bold;
+}
+
+.none {
+	display: none;
+}
+
+#btnReset, #btnSubmitItem, #btnReset2, #btnSubmitItem2, #btnSubmitQty, #startUpload {
+	left: -15px;
+    padding: 5px;
+    position: relative;
+    top: -2px;
+}
+
+#inline_content, #inline_content2, #inline_content3, #select_invoice, #editCustomer {
+	text-align: center;
+	padding: 10px;
+}
+
+/* Autocomplete Style
+----------------------------------*/
+
+.ui-autocomplete { position: absolute; cursor: default; }	
+
+/* workarounds */
+* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
+
+.ui-menu {
+	list-style:none;
+	padding: 2px;
+	margin: 0;
+	display:block;
+	float: left;
+}
+.ui-menu .ui-menu {
+	margin-top: -3px;
+}
+.ui-menu .ui-menu-item {
+	margin:0;
+	padding: 0;
+	zoom: 1;
+	float: left;
+	clear: left;
+	width: 100%;
+}
+.ui-menu .ui-menu-item a {
+	text-decoration:none;
+	display:block;
+	padding:.2em .4em;
+	line-height:1.5;
+	zoom:1;
+}
+.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-active {
+	font-weight: normal;
+	margin: -1px;
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}
+
+.ui-autocomplete {
+	z-index: 9999;
+}
+
+/* Component containers
+----------------------------------*/
+.ui-widget { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1.1em/*{fsDefault}*/; }
+.ui-widget .ui-widget { font-size: 1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1em; }
+.ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ /*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
+.ui-widget-content a { color: #222222/*{fcContent}*/; }
+.ui-widget-header { border: 1px solid #aaaaaa/*{borderColorHeader}*/; background: #cccccc/*{bgColorHeader}*/ /*{bgImgUrlHeader}*/ 50%/*{bgHeaderXPos}*/ 50%/*{bgHeaderYPos}*/ repeat-x/*{bgHeaderRepeat}*/; color: #222222/*{fcHeader}*/; font-weight: bold; }
+.ui-widget-header a { color: #222222/*{fcHeader}*/; }
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #d3d3d3/*{borderColorDefault}*/; background: #e6e6e6/*{bgColorDefault}*/ /*{bgImgUrlDefault}*/ 50%/*{bgDefaultXPos}*/ 50%/*{bgDefaultYPos}*/ repeat-x/*{bgDefaultRepeat}*/; font-weight: normal/*{fwDefault}*/; color: #555555/*{fcDefault}*/; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555/*{fcDefault}*/; text-decoration: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #999999/*{borderColorHover}*/; background: #dadada/*{bgColorHover}*/ /*{bgImgUrlHover}*/ 50%/*{bgHoverXPos}*/ 50%/*{bgHoverYPos}*/ repeat-x/*{bgHoverRepeat}*/; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcHover}*/; }
+.ui-state-hover a, .ui-state-hover a:hover { color: #212121/*{fcHover}*/; text-decoration: none; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #aaaaaa/*{borderColorActive}*/; background: #ffffff/*{bgColorActive}*/ /*{bgImgUrlActive}*/ 50%/*{bgActiveXPos}*/ 50%/*{bgActiveYPos}*/ repeat-x/*{bgActiveRepeat}*/; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcActive}*/; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #212121/*{fcActive}*/; text-decoration: none; }
+.ui-widget :active { outline: none; }
+
+/* Login Form
+----------------------------------*/
+
+#frmLogin {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border: 1px solid #EEEEEE;
+    left: 50%;
+    margin: -90px 0 0 -163px;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    width: 265px;
+    height: 140px;
+    box-shadow: 0 0 1px;
+}
+
+#frmLogin label {
+    display: inline-block;
+    width: 90px;
+}
+
+#frmLogin input[type="text"], #frmLogin input[type="password"] {
+    margin: 5px 0;
+}
+
+#frmLogin input[type="submit"] {
+    float: right;
+    margin: 10px 0 0;
+    padding: 5px;
+}
+
+#tblLogin {
+	margin: 0 auto;
+}
+
+#tblLogin td {
+	border: 0;
+	padding: 0;
+}
+
+.message {
+	color: red;
+    font-size: 0.7em;
+    left: 40px;
+    position: absolute;
+    top: 15px;
+}
+
+/* Select Branch Form
+----------------------------------*/
+
+#frmSelectBranch, #frmDatePicker, #frmChngPass {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border: 1px solid #EEEEEE;
+    left: 50%;
+    margin: -80px 0 0 -143px;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    width: 245px;
+    height: 120px;
+    box-shadow: 0 0 1px;
+    text-align: center;
+}
+
+#frmSelectBranch input {
+    display: block;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+#frmDatePicker input {
+	display: block;
+    margin: 10px auto;
+    padding: 10px;
+    text-align: center;
+}
+
+#frmChngPass input {
+	display: block;
+    margin: 20px auto;
+    padding: 5px;
+    text-align: center;
+}
+
+/* Select Window
+----------------------------------*/
+
+#selectWindow {
+	background: none repeat scroll 0 0 #dddddd;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 0 1px;
+    margin: 10px auto;
+    padding: 20px;
+    text-align: center;
+    width: 80%;
+}
+
+#selectWindow2 {
+	background: none repeat scroll 0 0 #DDDDDD;
+    border: 1px solid #EEEEEE;
+    box-shadow: 0 0 1px;
+    height: 160px;
+    left: 50%;
+    margin: -100px 0 0 -375px;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    width: 710px;
+    text-align: center;
+}
+
+#selectWindow3 {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border: 1px solid #EEEEEE;
+    box-shadow: 0 0 1px;
+    height: 340px;
+    left: 50%;
+    margin: -190px 0 0 -430px;
+    padding: 20px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    width: 820px;
+}
+
+#selectWindow li, #selectWindow2 li,#selectWindow3 li {
+	display: inline-block;
+	padding: 10px;
+}
+
+#selectWindow li a, #selectWindow2 li a, #selectWindow3 li a {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: #000;
+	opacity: 1;
+   	transition: opacity .25s ease-in-out;
+   	-moz-transition: opacity .25s ease-in-out;
+   	-webkit-transition: opacity .25s ease-in-out;
+}
+
+#selectWindow li a:hover, #selectWindow2 li a:hover, #selectWindow3 li a:hover {
+	opacity: 0.5;
+}
+
+/* Select Window Admin
+----------------------------------*/
+
+#selectWindowAdmin {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border: 1px solid #EEEEEE;
+    box-shadow: 0 0 1px;
+    height: 320px;
+    left: 50%;
+    margin: -180px 0 0 -450px;
+    padding: 20px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    width: 850px;
+}
+
+#selectWindowAdmin li {
+	display: inline-block;
+	padding: 10px;
+}
+
+#selectWindowAdmin li a {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: #000;
+	opacity: 1;
+   	transition: opacity .25s ease-in-out;
+   	-moz-transition: opacity .25s ease-in-out;
+   	-webkit-transition: opacity .25s ease-in-out;
+}
+
+#selectWindowAdmin li a:hover {
+	opacity: 0.5;
+}
+
+#rvnLogo {
+	left: 50%;
+    margin: 0 0 0 -100px;
+    position: absolute;
+    top: -55px;
+    width: 191px;
+}
+
+#logout {
+	float: right;
+	top: 4px;
+	right: 4px;
+}
+
+#back {
+	float: left;
+	top: 4px;
+	left: 4px;
+}
+
+#logout span {
+	position: absolute;
+	right: 40px;
+	top: 7px;
+}
+
+#back span {
+	position: absolute;
+	left: 40px;
+	top: 7px;
+}
+
+#logout, #back {
+	position: relative;
+	opacity: 1;
+   	transition: opacity .25s ease-in-out;
+   	-moz-transition: opacity .25s ease-in-out;
+   	-webkit-transition: opacity .25s ease-in-out;
+}
+
+#logout:hover, #back:hover {
+	opacity: 0.5;
+}
+
+#frmSalesReport, #frmItemHistoryReport, #frmStockReport, #frmAddItemLocation, #frmTransferReport, #frmStoresSalesReport {
+	display: table;
+	margin: 0 auto;
+	padding: 10px;
+	text-align: center;
+}
+
+#tblTransDetails, #tblTransReport, #tblSalesReport, #tblStockReport, #tblInvoiceDetail {
+	width: 100%;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: arial;
+}
+
+.noBorder {
+	border: medium none;
+}
+
+.txtPrice {
+	width: 50px;
+}
+
+#reportWrapper {
+	font-family: "Courier New", Courier, monospace !important;
+	width: 7cm;
+	margin: 20px auto;
+	text-align: center;
+}
+
+#reportWrapper2 {
+	font-family: "Courier New", Courier, monospace !important;
+	width: 90%;
+	margin: 20px auto;
+	text-align: center;
+}
+
+#reportWrapper3 {
+	font-family: "Courier New", Courier, monospace !important;
+	width: 90%;
+	text-align: center;
+}
+
+#reportWrapperFull {
+	font-family: "Courier New", Courier, monospace !important;
+	width: 100%;
+	text-align: center;
+}
+
+#topMenu {
+	background: none repeat scroll 0 0 #eeeeee;
+    box-shadow: 0 0 1px;
+    text-align: center;
+    min-height: 35px;
+}
+
+.topLink {
+	display: inline-block;
+	padding: 5px;
+	text-decoration: none;
+	color: #000;
+	opacity: 1;
+	position: relative;
+   	transition: opacity .25s ease-in-out;
+   	-moz-transition: opacity .25s ease-in-out;
+   	-webkit-transition: opacity .25s ease-in-out;
+}
+
+.topLink img {
+	float: left;
+}
+
+.topLink span {
+	float: left;
+    padding: 3px 5px;
+}
+
+.topLink:hover {
+	opacity: 0.5;
+}
+
+#downArrow {
+	background: url("../_img/arrow-down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 11px;
+    left: auto;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    width: 20px;
+    z-index: 1;
+}
+
+#notBoxWrapper {
+	display: none;
+}
+
+#notBox {
+	background: none repeat scroll 0 0 #fff;
+    border: 1px solid rgba(99, 99, 99, 0.4);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    overflow: auto;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    width: 350px;
+    height: 300px;
+}
+
+#notLinkWrapper {
+	display: inline-block;
+    position: relative;
+}
+
+#notHeader {
+	padding: 10px;
+	text-align: left;
+    font-family: tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.oneNot {
+    padding: 10px;
+    text-align: left;
+    font-family: tahoma,verdana,arial,sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+#frmEditItem, #frmAddItem {
+    display: table;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#tblEditItem, #tblAddItem, #tblAddNew {
+	text-align: left;
+}
+
+#btnUpdate, #btnAdd {
+	display: block;
+	padding: 10px;
+	margin: 10px auto;
+}
+
+#editItemWrapper, #addItemWrapper, #addNewWrapper {
+	margin: 0 auto;
+	display: table;
+	text-align: center;
+}
+
+#printArea {
+	display: none;
+}
+
+#txtCash, #txtVisa {
+    width: 40px;
+}
+
+#splitOptions {
+	display: none;
+}
+
+.oneImage
+{
+    background: none repeat scroll 0 0 whitesmoke;
+    float: left;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 0 1px #CCCCCC;
+}
+
+.oneImage:hover
+{
+    background: none repeat scroll 0 0 #EBEBEB;
+}
+
+.oneImage a
+{
+	display: block;
+}
+
+.oneImage img
+{
+	display: block;
+	width: 145px;
+	height: 145px;
+}
+
+.itemImg {
+	display: block;
+	max-width: 250px;
+	max-height: 300px;
+	float: left;
+}
+
+.itemSalesStock {
+	font-size: 12px;
+	text-align: center;
+	float: left;
+	margin-left: 10px;
+}
+
+.itemData {
+    margin: 10px 0;
+}
+
+.itemPrice {
+    margin: 10px;
+}
+
+.itemData, .itemPrice {
+	float: left;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.itemSalesStock td, .itemData td, .itemPrice td{
+	padding: 2px;
+}
+
+.itemSalesStock th, .itemData th, .itemPrice th{
+	font-weight: bold;
+	padding: 3px;
+}
+
+.error {
+	color: red;
+}
+
+.success {
+	color: green;
+}
+
+#btnAddItemLocation, #btnEditItemLocation {
+	padding: 5px 10px;
+}
+
+.editTrans {
+	display: block;
+}
