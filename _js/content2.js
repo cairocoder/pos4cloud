@@ -522,10 +522,14 @@ $("#chkVoucher").click(function(){
 	var voucherCode = $("#voucherCode").val();
 	var itemId      = new Array();
 	var rtp         = new Array();
+	var rtp2        = new Array();
 	var msrp        = new Array();
+	var totalRtp    = 0;
+	var totalMsrp   = 0;
 
 	$(".rtp").each(function() {
 		rtp.push($(this));
+		rtp2.push($(this).text());
 	});
 
 	$(".msrp").each(function() {
@@ -536,6 +540,11 @@ $("#chkVoucher").click(function(){
 		itemId.push ($(this).text());
 	});
 
+	for (var i = 0; i < rtp.length; i++) {
+		totalMsrp += parseInt(msrp[i]);
+		totalRtp  += parseInt(rtp2[i]);
+	};
+
 	if (itemId.length != 0)
 	{
 		if (voucherCode.length != 0) {
@@ -543,7 +552,7 @@ $("#chkVoucher").click(function(){
 				url: "_inc/ajaxGeneral.php",
 				type: "post",
 				dataType: "json",
-				data: {"action":"chkVoucher", "voucherCode":voucherCode}
+				data: {"action":"chkVoucher", "voucherCode":voucherCode, "totalRtp":totalRtp, "totalMsrp":totalMsrp}
 			}).done(function(data) {
 				switch (data.err) {
 					case 0 : alert("Voucher is not valid!");
