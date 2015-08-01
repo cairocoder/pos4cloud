@@ -54,21 +54,20 @@ if (isset($_POST['submitLogin']))
 	}
   
 } elseif (isset($_POST['submitPassword'])) {
-	//email validation
 	$email = test_input($_POST["txtEmail"]);
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-	  $message = "Invalid email format";
+		$message = "Invalid email format!";
 	} else {
-		$chkMail  = $db->query("SELECT `email` FROM `users`
-								WHERE `email` = '{$email}'");
+		$chkMail  = $db->query("SELECT `email`, `user_id` FROM `users`
+								WHERE `email` = '{$email}'
+								LIMIT 1");
 		if ($db->num_rows($chkMail) > 0) {
-			$newPassOrign = generateRandomString();
-			$newPassMD5   = md5($newPassOrign);
-			$db->query("UPDATE `users` SET `password` = '{$newPassMD5}'
-						WHERE `email` = '{$email}'");
-		    //send mail to activate the account
-		    $message = "Your new password is:\r\n" . $newPassOrign;
-			$eMail->IsSMTP();                                      // set mailer to use SMTP
+			$getData = $db->fetch_array($chkMail);
+			//send mail to activate the account
+		    //$message = "Your new password is:\r\n" . $newPassOrign;
+		    $link = 'http://www.pos4cloud.com/pos4cloud/login.php?userId=' . $getData['user_id'];
+		    $message = "Please click the link below to confirm changing your password:\r\n" . $link;
+			$eMail->IsSMTP();                     // set mailer to use SMTP
 			$eMail->Host     = "ira.iravin.com";  // specify main and backup server
 			$eMail->SMTPSecure = 'ssl';
 			$eMail->SMTPDebug = 1;
@@ -79,13 +78,46 @@ if (isset($_POST['submitLogin']))
 			$eMail->From     = "info@iravin.com";
 			$eMail->AddAddress($email);
 			$eMail->WordWrap = 50; 
-			$eMail->Subject  = "Password Changed!";
+			$eMail->Subject  = "Confirm Changing Password!";
 		 	$eMail->Body     = $message;
 		 	$eMail->Send();
-			$message = "Password changed, please check back your email.";
+			$message = "Confirmation mail sent, please check back your email.";
 		} else {
 			$message = "Email not exist!";
 		}
+	}
+} elseif (isset($_GET['userId'])) {
+	//email validation
+	$userId   = $_GET['userId'];
+	$chkMail  = $db->query("SELECT `email` FROM `users`
+							WHERE `user_id` = '{$userId}'
+							LIMIT 1");
+	if ($db->num_rows($chkMail) > 0) {
+		$getData      = $db->fetch_array($chkMail);
+		$email        = $getData['email'];
+		$newPassOrign = generateRandomString();
+		$newPassMD5   = md5($newPassOrign);
+		$db->query("UPDATE `users` SET `password` = '{$newPassMD5}'
+					WHERE `user_id` = '{$userId}'");
+	    //send mail to activate the account
+	    $message = "Your new password is:\r\n" . $newPassOrign;
+		$eMail->IsSMTP();                     // set mailer to use SMTP
+		$eMail->Host     = "ira.iravin.com";  // specify main and backup server
+		$eMail->SMTPSecure = 'ssl';
+		$eMail->SMTPDebug = 1;
+		$eMail->Port     = 465;
+		$eMail->SMTPAuth = true;     // turn on SMTP authentication
+		$eMail->Username = "info@iravin.com";  // SMTP username
+		$eMail->Password = "passme123"; // SMTP password
+		$eMail->From     = "info@iravin.com";
+		$eMail->AddAddress($email);
+		$eMail->WordWrap = 50; 
+		$eMail->Subject  = "Password Changed!";
+	 	$eMail->Body     = $message;
+	 	$eMail->Send();
+		$message = "Password changed, please check back your email.";
+	} else {
+		$message = "Email not exist!";
 	}
 } else { // Form has not been submitted.
 	$email = "";
