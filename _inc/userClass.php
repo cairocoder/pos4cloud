@@ -9,7 +9,7 @@
         public $email;
         public $loc_id;
         public $job_id;
-        public $user_type;
+        public $role_id;
     
         public static function find_all() {
             $result = self::find_by_sql("SELECT * FROM users");

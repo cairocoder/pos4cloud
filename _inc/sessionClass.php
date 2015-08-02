@@ -8,7 +8,7 @@
         public  $email;
         public  $loc_id;
         public  $job_id;
-        public  $user_type;
+        public  $role_id;
     
         function __construct() {
             session_start();
@@ -26,18 +26,18 @@
         
         public function login($user) {
             if($user){
-                $this->user_id    = $_SESSION['user_id']    = $user->user_id;
-                $this->username   = $_SESSION['username']   = $user->username;
-                $this->email      = $_SESSION['email']      = $user->email;
-                $this->loc_id     = $_SESSION['loc_id']     = $user->loc_id;
-                $this->job_id     = $_SESSION['job_id']     = $user->job_id;
-                $this->user_type  = $_SESSION['user_type']  = $user->user_type;
-                $this->logged_in  = true;
+                $this->user_id   = $_SESSION['user_id']  = $user->user_id;
+                $this->username  = $_SESSION['username'] = $user->username;
+                $this->email     = $_SESSION['email']    = $user->email;
+                $this->loc_id    = $_SESSION['loc_id']   = $user->loc_id;
+                $this->job_id    = $_SESSION['job_id']   = $user->job_id;
+                $this->role_id   = $_SESSION['role_id']  = $user->role_id;
+                $this->logged_in = true;
             }
         }
         
         public function logout() {
-            unset($_SESSION['user_id'], $_SESSION['date']);
+            unset($_SESSION['user_id']);
             unset($this->user_id);
             $this->logged_in = false;
         }
