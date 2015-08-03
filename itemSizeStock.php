@@ -21,6 +21,14 @@ if (!empty($_SESSION['slipNo'])){
 		color: black;
 		font-weight: bold;
 	}
+	.totalSales, .totalSalesx, .totalSalesxx {
+		color: red;
+		font-weight: bold;
+	}
+	.totalStock, .totalStockx, .totalStockxx {
+		color: black;
+		font-weight: bold;
+	}
 	table {
 		width: 100%;
 	}
@@ -131,9 +139,9 @@ if (!empty($_SESSION['slipNo'])){
 					<?php $sales = userClass::getItemSizeSales($itemId, $value1['size_id'], $key); ?>
 					<?php $totalSales += $sales; ?>
 					<?php if ($sales > 0): ?>
-						<td><?php echo $sales; ?></td>
+						<td class="tdSales"><?php echo $sales; ?></td>
 					<?php else: ?>
-						<td></td>
+						<td class="tdSales"></td>
 					<?php endif ?>
 				<?php endforeach; ?>
 					<td class="red"><?php echo  $totalSales; ?></td>
@@ -149,21 +157,36 @@ if (!empty($_SESSION['slipNo'])){
 					?>
 					<?php if ($stock > 0): ?>
 						<?php if ($itemSizeSlipStock != 0 && $itemSizeSlipStock > $stock): ?>
-							<td style="background-color:red"><a href="#" class="itemSizeStockDetail" itemId="<?php echo $itemId ?>" sizeId="<?php echo $value2['size_id'] ?>" locId="<?php echo $key ?>"><?php echo $stock; ?></a></td>
+							<td class="tdStock" style="background-color:red"><a href="#" class="itemSizeStockDetail" itemId="<?php echo $itemId ?>" sizeId="<?php echo $value2['size_id'] ?>" locId="<?php echo $key ?>"><?php echo $stock; ?></a></td>
 						<?php else: ?>
-							<td><a href="#" class="itemSizeStockDetail" itemId="<?php echo $itemId ?>" sizeId="<?php echo $value2['size_id'] ?>" locId="<?php echo $key ?>"><?php echo $stock; ?></a></td>
+							<td class="tdStock"><a href="#" class="itemSizeStockDetail" itemId="<?php echo $itemId ?>" sizeId="<?php echo $value2['size_id'] ?>" locId="<?php echo $key ?>"><?php echo $stock; ?></a></td>
 						<?php endif; ?>
 					<?php else: ?>
 						<?php if ($itemSizeSlipStock != 0 && $itemSizeSlipStock > $stock): ?>
-							<td style="background-color:red"></td>
+							<td class="tdStock" style="background-color:red"></td>
 						<?php else: ?>
-							<td></td>
+							<td class="tdStock"></td>
 						<?php endif; ?>
 					<?php endif; ?>
 				<?php endforeach; ?>
 					<td class="black"><?php echo  $totalStock; ?></td>
 			</tr>
 			<?php endforeach; ?>
+			<tr>
+				<th rowspan="2">Total</th>
+				<th>Sales</th>
+				<?php foreach ($sizes as $key2 => $value2): ?>
+					<td class="totalSalesx"></td>
+				<?php endforeach; ?>
+					<td class="totalSalesxx"></td>
+			</tr>
+			<tr>
+				<th>Stock</th>
+				<?php foreach ($sizes as $key2 => $value2): ?>
+					<td class="totalStockx"></td>
+				<?php endforeach; ?>
+					<td class="totalStockxx"></td>
+			</tr>
 		</tbody>
 	</table>
 </div>
@@ -222,5 +245,44 @@ require_once ("_inc/footer.php");
 <script>
 	$('td').click(function(){
 		$(this).css("background-color", "#"+$('.color').val());
+	});
+</script>
+<script src="_js/numeral.min.js"></script>
+<script>
+	var totalSalesx  = 0;
+	var totalStockx  = 0;
+	var totalSalesxx = 0;
+	var totalStockxx = 0;
+	$(".totalSalesx").each(function(){
+        var that = $(this)
+		curIndex = $(that).index() - 3;
+		$("tr").find("td:eq("+curIndex+")[class|=\'tdSales\']").each(function(){
+          totalSalesx += Number($(this).text().replace(/,/g, ""));
+		});
+		$(that).text(totalSalesx);
+		totalSalesx = 0;
+	});
+	$(".totalStockx").each(function(){
+        var that = $(this)
+		curIndex = $(that).index() - 1;
+		$("tr").find("td:eq("+curIndex+")[class|=\'tdStock\']").each(function(){
+          totalStockx += Number($(this).text().replace(/,/g, ""));
+		});
+		$(that).text(totalStockx);
+		totalStockx = 0;
+	});
+	$(".totalSalesxx").each(function(){
+		$(this).parent().find(".totalSalesx").each(function(){
+			totalSalesxx += Number($(this).text().replace(/,/g, ""));
+		});
+		$(this).text(totalSalesxx);
+		totalSalesxx = 0;
+	});
+	$(".totalStockxx").each(function(){
+		$(this).parent().find(".totalStockx").each(function(){
+			totalStockxx += Number($(this).text().replace(/,/g, ""));
+		});
+		$(this).text(totalStockxx);
+		totalStockxx = 0;
 	});
 </script>
