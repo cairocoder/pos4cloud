@@ -21,7 +21,7 @@
 <body class="bgSelWinLogin">
 	<div id="loadingWrapper"><img src="_img/ajax-loader.gif" id="loading"></div>
 	<div id="topMenu">
-		<?php if ($_SESSION['user_type'] == "sadmin" || $_SESSION['user_type'] == "stocksadmin" || $_SESSION['user_type'] == "analyst"): ?>
+		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "5" || $_SESSION['role_id'] == "2"): ?>
 		<a href="admin.php" class="topLink"><img src="_img/btn-admin.png"><span>Admin Area</span></a>
 		<?php endif; ?>
 		<?php switch ($_SESSION['job_id']) {
@@ -85,8 +85,8 @@
 	</div>
 	<img title="RAViN Logo" src="_img/logo.png" style="display: block; margin: 30px auto;">
 	<ul id="selectWindow">
-		<?php if ($_SESSION['user_type'] == "sadmin" || $_SESSION['user_type'] == "sales"
-		|| $_SESSION['user_type'] == "stockadmin" || $_SESSION['user_type'] == "stocksadmin"): ?>
+		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "1"
+		|| $_SESSION['role_id'] == "stockadmin" || $_SESSION['role_id'] == "5"): ?>
 		<li><a href="salesBox.php" target="_blank"><img src="_img/btn-sales.png"><br><br><br>Sales (F2)</a></li>
 		<?php if ($_SESSION['loc_id'] == 44): ?>
 		<li><a href="returnBox2.php" target="_blank"><img src="_img/btn-return.png"><br><br><br>Return (F3)</a></li>
@@ -98,21 +98,22 @@
 		<?php endif; ?>
 		<li><a href="eodReport.php" target="_blank"><img src="_img/btn-eod-report.png"><br><br>End of Day<br>Report</a></li>
 		<li><a href="stockReport.php" target="_blank"><img src="_img/btn-stock-report.png"><br><br><br>Stock Report</a></li>
-		<?php if ($_SESSION['user_type'] == "sadmin" || $_SESSION['user_type'] == "analyst" || $_SESSION['loc_id'] == 50 || $_SESSION['loc_id'] == 51 || $_SESSION['loc_id'] == 65 || $_SESSION['loc_id'] == 44): ?>
+		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "2" || $_SESSION['loc_id'] == 50 || $_SESSION['loc_id'] == 51 || $_SESSION['loc_id'] == 65 || $_SESSION['loc_id'] == 44): ?>
 		<li><a href="invoicesReport.php" target="_blank"><img src="_img/btn-invoices.png"><br><br>Invoices<br>Report</a></li>
 		<?php endif; ?>
 		<li><a href="inventoryReport.php" target="_blank"><img src="_img/btn-inventory.png"><br><br>Inventory<br>Report</a></li>
-		<?php if ($_SESSION['user_type'] == "sadmin" || $_SESSION['user_type'] == "analyst" || $_SESSION['loc_id'] == 50 || $_SESSION['loc_id'] == 51 || $_SESSION['loc_id'] == 65 || $_SESSION['loc_id'] == 55 || $_SESSION['loc_id'] == 44): ?>
+		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "2" || $_SESSION['loc_id'] == 50 || $_SESSION['loc_id'] == 51 || $_SESSION['loc_id'] == 65 || $_SESSION['loc_id'] == 55 || $_SESSION['loc_id'] == 44): ?>
 		<li><a href="historyReport.php" target="_blank"><img src="_img/btn-history.png"><br><br>Item History<br>Report</a></li>
 		<?php endif; ?>
-		<?php if ($_SESSION['user_type'] == "sadmin" || $_SESSION['user_type'] == "sales" || $_SESSION['user_type'] == "stockadmin" || $_SESSION['user_type'] == "stocksadmin"): ?>
+		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "1" || $_SESSION['role_id'] == "stockadmin" || $_SESSION['role_id'] == "5"): ?>
 		<li><a href="sizeSwap.php" target="_blank"><img src="_img/btn-sizeSwap.png"><br><br><br>Size Swap</a></li>
+		<!-- <li><a href="saleBarcode.php" target="_blank"><img src="_img/btn-sale-barcode.png"><br><br><br>Sale Barcode</a></li> -->
 		<?php endif; ?>
 		<li><a href="changePassword.php" target="_blank"><img src="_img/btn-change-password.png"><br><br>Change<br>Password</a></li>
-		<?php if ($_SESSION['user_type'] == "sadmin" || $_SESSION['user_type'] == "analyst"): ?>
+		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "2"): ?>
 		<li><a href="fullReport.php"><img src="_img/btn-full-report.png"><br><br><br>Full Report</a></li>
 		<?php endif; ?>
-		<?php if ($_SESSION['user_type'] == "stockadmin"): ?>
+		<?php if ($_SESSION['role_id'] == "stockadmin"): ?>
 		<li><a href="addItemLocation.php"><img src="_img/btn-change-item-location.png"><br><br>Add Item<br>Location</a></li>
 		<?php
 			$userId = $_SESSION['user_id'];
@@ -155,7 +156,7 @@ $(document).mouseup(function(e){
     }
 });
 </script>
-<?php if ($_SESSION['user_type'] != "stockadmin" || $_SESSION['user_type'] != "stocksadmin"): ?>
+<?php if ($_SESSION['role_id'] != "stockadmin" || $_SESSION['role_id'] != "5"): ?>
 	<?php if ($_SESSION['loc_id'] == 44): ?>
 		<script type="text/javascript">
 			$('body').bind('keydown', function(e) {
