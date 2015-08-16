@@ -75,16 +75,18 @@ if (!empty($_POST['action']) && $_POST['action'] == "exportBranchInvoices")
 				  invoice_detail.qty, invoice_detail.rtp, trans_types.desc AS invoType,
 				  invoice_header.date, invoice_header.time, payment_types.desc AS payment,
 				  locations.short_desc AS loc, customers.cust_name, customers.cust_tel,
-				  employees.emp_name, items_size.desc AS size
+				  employees.emp_name, items_size.desc AS size, items_dept.desc AS dept
 				  FROM invoice_detail
 				  JOIN invoice_header ON invoice_detail.invo_no = invoice_header.invo_no
 				  AND invoice_detail.loc_id = invoice_header.loc_id
 				  JOIN trans_types ON invoice_detail.type = trans_types.trans_type_id
 				  JOIN payment_types ON invoice_header.payment_type_id = payment_types.payment_type_id
-				  JOIN locations  ON invoice_detail.loc_id = locations.loc_id
-				  LEFT JOIN customers ON invoice_header.cust_id = customers.cust_id
-				  LEFT JOIN employees ON invoice_header.sales_man_id = employees.emp_id
+				  JOIN locations       ON invoice_detail.loc_id = locations.loc_id
+				  LEFT JOIN customers  ON invoice_header.cust_id = customers.cust_id
+				  LEFT JOIN employees  ON invoice_header.sales_man_id = employees.emp_id
 				  LEFT JOIN items_size ON items_size.size_id = invoice_detail.size_id
+				  LEFT JOIN items      ON items.item_id = invoice_detail.item_id
+				  LEFT JOIN items_dept ON items.dept_id = items_dept.dept_id
 				  WHERE invoice_detail.loc_id = '{$locId}'
 				  AND invoice_header.date BETWEEN '{$dateFrom}' AND '{$dateTo}'
 				  ORDER BY invoice_detail.invo_no ASC";
@@ -93,16 +95,18 @@ if (!empty($_POST['action']) && $_POST['action'] == "exportBranchInvoices")
 				  invoice_detail.qty, invoice_detail.rtp, trans_types.desc AS invoType,
 				  invoice_header.date, invoice_header.time, payment_types.desc AS payment,
 				  locations.short_desc AS loc, customers.cust_name, customers.cust_tel,
-				  employees.emp_name, items_size.desc AS size
+				  employees.emp_name, items_size.desc AS size, items_dept.desc AS dept
 				  FROM invoice_detail
 				  JOIN invoice_header ON invoice_detail.invo_no = invoice_header.invo_no
 				  AND invoice_detail.loc_id = invoice_header.loc_id
 				  JOIN trans_types ON invoice_detail.type = trans_types.trans_type_id
 				  JOIN payment_types ON invoice_header.payment_type_id = payment_types.payment_type_id
-				  JOIN locations  ON invoice_detail.loc_id = locations.loc_id
-				  LEFT JOIN customers ON invoice_header.cust_id = customers.cust_id
-				  LEFT JOIN employees ON invoice_header.sales_man_id = employees.emp_id
+				  JOIN locations       ON invoice_detail.loc_id = locations.loc_id
+				  LEFT JOIN customers  ON invoice_header.cust_id = customers.cust_id
+				  LEFT JOIN employees  ON invoice_header.sales_man_id = employees.emp_id
 				  LEFT JOIN items_size ON items_size.size_id = invoice_detail.size_id
+				  LEFT JOIN items      ON items.item_id = invoice_detail.item_id
+				  LEFT JOIN items_dept ON items.dept_id = items_dept.dept_id
 				  WHERE invoice_header.date BETWEEN '{$dateFrom}' AND '{$dateTo}'
 				  ORDER BY invoice_detail.invo_no ASC";
 	}
@@ -112,7 +116,7 @@ if (!empty($_POST['action']) && $_POST['action'] == "exportBranchInvoices")
 	$file_handle = fopen("../_uploads/".$fileName, "w");
 	fputs($file_handle, b"\xEF\xBB\xBF"); //write utf-8 BOM to file
 
-	$csv = "LOC, INVOICE, TYPE, ITEM, SIZE, QTY, RTP, TOTAL, DATE, TIME, C.NAME, C.TEL, S.MAN, PAYMENT" . "\n";
+	$csv = "LOC, INVOICE, TYPE, ITEM, SIZE, DEPT, QTY, RTP, TOTAL, DATE, TIME, C.NAME, C.TEL, S.MAN, PAYMENT" . "\n";
 
 	while ($row = $db->fetch_array($result))
 	{
@@ -121,6 +125,7 @@ if (!empty($_POST['action']) && $_POST['action'] == "exportBranchInvoices")
 		$csv .= $row['invoType'] . ',';
 		$csv .= $row['item_id'] . ',';
 		$csv .= $row['size'] . ',';
+		$csv .= $row['dept'] . ',';
 		if ($row['invoType'] == "Return") {
 			$csv .= $row['qty'] * (-1) . ',';
 		} else {
