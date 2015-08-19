@@ -674,4 +674,17 @@ $("#btnEditCust").click(function() {
 	}
 });
 
+$('.updateRole').click(function() {
+	var chkRoles = Array();
+	var roleId   = $(this).parent().parent().find('.role').attr('data-roleId');
+	var roleName = $(this).parent().parent().find('.role').val();
+
+	$(this).parent().parent().find('.selPerm:checked').each(function() {
+		chkRoles.push($(this).val());
+	});
+
+	//console.log(roleId);
+});
+
+
 

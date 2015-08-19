@@ -3,6 +3,7 @@
 	require_once("_inc/sessionClass.php");
 	require_once("_inc/dbClass.php");
 	require_once("_inc/userClass.php");
+	require_once("_inc/roleClass.php");
 
 	if(!$session->is_logged_in()) {
 	  header("location: index.php");
