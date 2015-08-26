@@ -129,13 +129,13 @@ if (isset($_GET['btnSubmit']))
 		unset($row['id']);
 		unset($row[0]);
 		$row = array_values($row);
-		$dataX = $dataX + floor($dataCounter/700000);
+		$dataX = $dataX + floor($dataCounter/1000);
 		${"data".$dataX}[] = $row;
 		$dataCounter++;
 	}
 
 	$fileName = "fullReport-" . date('m-d-Y-H-i-s') . ".xlsx";
-	$path = "_uploads/" . $fileName;
+	$path     = "_uploads/" . $fileName;
 
 	$writer = new XLSXWriter();
 	$writer->setAuthor('Said Abdul Aziem');

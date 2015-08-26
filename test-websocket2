@@ -1,0 +1,394 @@
+<?php include '_inc/header.php' ?>
+
+<?php
+
+	if(!empty($_GET['catid']) && empty($_GET['stock'])){
+		
+		//get gender value and gender name
+		if (!empty($_GET['deptmen'])){
+			$gender = 3;
+			$gender_name = 'men';
+		}else if(!empty($_GET['deptwomen'])){
+			$gender = 6;
+			$gender_name = 'women';
+		}
+		//value to hold category id
+		$catId  = $_GET['catid'];
+		$depart = $_GET['dept'];
+
+		$qu = "SELECT warehouses.item_id, SUM(warehouses.qty) AS qty, items.gender_id, items_dept.desc, items_dept.long_desc,
+				items_dept.dept_id, items.msrp,items.rtp
+				FROM `warehouses`
+				JOIN `items`      ON items.item_id      = warehouses.item_id
+				JOIN `items_dept` ON items_dept.dept_id = items.dept_id
+				WHERE items.gender_id  IN ($gender, 5)
+				AND warehouses.wrhs_id IN (20,21,22,23,25,26,28,30,32,38,40,44,47)";
+		if($catId == 65){
+			$qu .= " AND items.dept_id IN (65,27,4,7)";
+		}else if ($catId == 27){
+			$qu .= " AND items.dept_id IN (27,4)";
+		}else if ($catId == 5){
+			$qu .= " AND items.dept_id IN (5,9)";
+		}else if ($catId == 60){
+			$qu .= " AND items.dept_id IN (60,68)";
+		}else if ($catId == 21){
+			$qu .= " AND items.dept_id IN (21,15)";
+		}else if ($catId == 54){
+			$qu .= " AND items.dept_id IN (54,50,46)";
+		}else if ($catId == 55){
+			$qu .= " AND items.dept_id IN (55,47)";
+		}else{
+			$qu .= " AND items.dept_id = $catId";
+		}
+			$qu	.= " AND warehouses.size_id NOT IN (0, 1)
+				     GROUP BY warehouses.item_id
+				     ORDER BY warehouses.item_id DESC";
+		$sq = $db1->query($qu);
+		$sq = $db1->execute();
+		$products = $db1->fetchAll(PDO::FETCH_ASSOC);
+
+	}else if(!empty($_GET['catid']) && !empty($_GET['stock'])){
+
+		//get gender value and gender name
+		if(!empty($_GET['deptuni'])){
+			$gender = 5;
+		}else if (!empty($_GET['deptmen'])){
+			$gender = 3;
+			$gender_name = 'men';
+		}else if(!empty($_GET['deptwomen'])){
+			$gender = 6;
+			$gender_name = 'women';
+		}
+		//value to hold category id
+		$catId = $_GET['catid'];
+
+		$qu = "SELECT warehouses.item_id, SUM(warehouses.qty) AS qty, items.gender_id, items_dept.desc, items_dept.long_desc,
+				items_dept.dept_id, items.msrp,items.rtp
+				FROM `warehouses`
+				JOIN `items`      ON items.item_id      = warehouses.item_id
+				JOIN `items_dept` ON items_dept.dept_id = items.dept_id
+				WHERE items.gender_id IN ($gender, 5)
+				AND warehouses.wrhs_id NOT IN (62)";
+		if($catId == 65){
+			$qu .= " AND items.dept_id IN (65,27,4,7)";
+		}else if ($catId == 27){
+			$qu .= " AND items.dept_id IN (27,4)";
+		}else if ($catId == 5){
+			$qu .= " AND items.dept_id IN (5,9)";
+		}else if ($catId == 60){
+			$qu .= " AND items.dept_id IN (60,68)";
+		}else if ($catId == 21){
+			$qu .= " AND items.dept_id IN (21,15)";
+		}else if ($catId == 54){
+			$qu .= " AND items.dept_id IN (54,50,46)";
+		}else if ($catId == 55){
+			$qu .= " AND items.dept_id IN (55,47)";
+		}else{
+			$qu .= " AND items.dept_id = $catId";
+		}
+			$qu .= " AND warehouses.size_id NOT IN (0, 1)
+				     GROUP BY warehouses.item_id
+				     ORDER BY warehouses.item_id DESC";
+		$sq = $db1->query($qu);
+		$sq = $db1->execute();
+		$products = $db1->fetchAll(PDO::FETCH_ASSOC);
+	}else{
+		$catId  = "";
+	}
+	if(!empty($_GET['txtSearch'])){
+		//search for specific item
+		$txtSearch = $_GET['txtSearch'];
+		$query     = "SELECT warehouses.item_id, SUM(warehouses.qty) AS qty, items.gender_id, items_dept.desc, items_dept.long_desc,items_dept.dept_id,items.msrp,items.rtp
+					  FROM `warehouses`
+					  JOIN `items`      ON items.item_id      = warehouses.item_id
+					  JOIN `items_dept` ON items_dept.dept_id = items.dept_id
+					  WHERE warehouses.wrhs_id IN (20,21,22,23,25,26,28,30,32,38,40,44,47)
+					  AND warehouses.size_id NOT IN (0, 1) 
+					  AND (items.item_id  LIKE CONCAT('%', :txtSearch, '%') OR items_dept.long_desc LIKE CONCAT('%', :txtSearch, '%'))
+					  GROUP BY warehouses.item_id
+				   	  ORDER BY warehouses.item_id ASC";
+		$sq = $db1->query($query);
+		$db1->bind(":txtSearch", $txtSearch);
+		$sq = $db1->execute();
+		$products = $db1->fetchAll(PDO::FETCH_ASSOC);
+		if(!empty($products)){
+			foreach($products as $pros){
+				$catId  = $pros['dept_id'];
+				$depart = $pros['long_desc'];
+			}
+		}
+		//get the gender ofthis specific item
+		$qw = ("SELECT gender_id FROM `items` WHERE item_id = :id");
+		$sr = $db1->query($qw);
+		$db1->bind(":id", $txtSearch);
+		$sr = $db1->execute();
+		$genders = $db1->fetchAll(PDO::FETCH_ASSOC);
+		if(!empty($genders)){
+			foreach($genders as $gend){
+				if($gend['gender_id'] == 3){
+					$gender_name = 'men';
+					$gender      = $gend['gender_id'];
+				}else{
+					$gender_name = 'women';
+					$gender      = $gend['gender_id'];
+				}
+			}
+		}
+		
+	}else if(!empty($_GET['selGnd']) && $_GET['txtSearch'] == ''){
+		$query     = "SELECT warehouses.item_id, SUM(warehouses.qty) AS qty, items.gender_id, items_dept.desc, items_dept.long_desc,items_dept.dept_id,items.msrp,items.rtp
+					  FROM `warehouses`
+					  JOIN `items`      ON items.item_id      = warehouses.item_id
+					  JOIN `items_dept` ON items_dept.dept_id = items.dept_id
+                      WHERE warehouses.wrhs_id IN (20,21,22,23,25,26,28,30,32,38,40,44,47)";
+		if (!empty($_GET['selGnd'])) {
+			$gender   = $_GET['selGnd'];
+			$query   .= " AND items.gender_id = '{$gender}'";
+		}
+
+		if (!empty($_GET['selCat'])) {
+			$category = $_GET['selCat'];
+			$query   .= " AND items.dept_id = '{$category}'";
+		}
+
+		if(!empty($_GET['selSiz'])){
+			$sizee  = $_GET['selSiz'];
+			$query .= " AND warehouses.size_id = '{$sizee}'";
+		}
+
+			$query .= " GROUP BY warehouses.item_id
+					    ORDER BY warehouses.item_id ASC";
+
+			$sq = $db1->query($query);
+			$db1->bind(":txtSearch", $txtSearch);
+			$sq = $db1->execute();
+			$products = $db1->fetchAll(PDO::FETCH_ASSOC);
+
+			if(!empty($products)){
+				foreach($products as $pros){
+					$catId  = $pros['dept_id'];
+					$depart = $pros['long_desc'];
+				}
+			}
+
+			if (!empty($_GET['selGnd'])){
+				$gender_id = $_GET['selGnd'];
+				if($gender_id == 3){
+					$gender_name = 'men';
+				}else{
+					$gender_name = 'women';
+				}
+			}
+	}
+?>
+
+<div class="container">
+
+	<div class="row">
+
+		<div class="span9">
+
+			<!-- <div class="search"> -->
+				<!-- <div class="titleHeader clearfix">
+					
+				</div> -->
+
+				<div class="search_div" id="sticker">
+					<table>
+						<tr>
+							<td class="cat_head">
+								<div class="items_search">
+									<form name="frmSearch" method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-inline">
+									  	<input name="txtSearch" id="txtSearch" type="text" class="spans3" placeholder="Type Search Term...">
+										<select name="selGnd" id="selGnd" class="spans3" style="display:none;">
+									   	  <option value="<?php echo $gender ?>"><?php echo $gender_name ?></option>
+									    </select>
+									    <select name="selCat" id="selCat" class="spans3" style="display:none;">
+									  	  <option value="<?php echo $catId ?>"><?php echo $depart ?></option>
+									    </select>
+									    <select name="selSiz" id="selSiz" class="spans3">
+									    <?php
+									    //query to select items available in warehouses && in cairo stores
+										$q = "SELECT warehouses.size_id, items_size.desc , sum(warehouses.qty) as qty
+											  FROM `warehouses`
+											  JOIN `items_size` ON items_size.size_id = warehouses.size_id
+											  JOIN `items`      ON items.item_id      = warehouses.item_id
+											  WHERE items.gender_id = $gender
+											  AND items.dept_id = $catId
+									 		  AND warehouses.wrhs_id IN (20,21,22,23,25,26,28,30,32,38,40,44,47)
+											  AND items_size.size_id NOT IN (0 , 1)
+											  GROUP BY warehouses.size_id
+											  ORDER BY warehouses.size_id";
+										$sql = $db1->query($q);
+										$sql = $db1->execute();
+										$result = $db1->fetchAll(PDO::FETCH_ASSOC); 
+										if(!empty($result)){
+											echo '<option value="">--'.$lang['SELECT_SIZE'].'--</option>';
+											foreach($result as $item){
+												if($item['qty']  > 5){
+													echo '<option value="'.$item['size_id'].'">'.$item['desc'].'</option>';
+												}
+											}
+										}
+									    ?>
+									    </select>
+									    <select name="selStock" id="selStock" class="spans3">
+									  	  <option value="0">--<?php echo $lang['SELECT_STOCK'] ?>--</option>
+									  	  <option value="1">--<?php echo $lang['ONLINE_STOCK'] ?>--</option>
+									  	  <option value="2">--<?php echo $lang['STORES_STOCK'] ?>--</option>
+									    </select>
+									    <button type="submit" class="btn btn-primary"><i class="icon-search"></i></button>
+									</form><!--end form-->
+								</div>	
+							</td>
+							<td class="cat_head">
+								<div class="pro-range-slider">
+									<div class="price-range">
+										<p class="clearfix">
+										  <label>-- <?php echo $lang['RANGE_YOUR_PRICE'] ?>:</label>
+										  <input type="text" id="amount">
+										</p>
+										<div id="slider-range"></div>
+										<br>
+									</div>
+								</div>	
+							</td>
+						</tr>
+					</table>
+				</div>
+
+			<!-- </div>end search -->
+			<?php
+				if(!empty($_GET['deptmen'])){
+					echo '<input type="hidden" id="gend_id" value="3">';
+				}else if(!empty($_GET['deptwomen'])){
+					echo '<input type="hidden" id="gend_id" value="6">';
+				}
+			?>
+			<div class="row">
+				<ul class="hProductItems clearfix">
+					<?php if(!empty($products)){?>
+					<?php foreach ($products as $key => $value):?>
+					<?php
+					if($value['qty'] > 5){
+						$url = ''.$small_link.''.$value['item_id'].'a.jpg';
+						$array = get_headers($url);
+						$string = $array[0];
+						if(strpos($string,"200"))
+						  {
+				    ?>
+					    <li class="span3 clearfix">
+							<div class="thumbnail">
+								<?php
+								if($value['gender_id'] == 3){
+									$gender_name = 'men';
+								}else{
+									$gender_name = 'women';
+								}
+								$dept_name = preg_replace('/\s+/', '-', $lang[$value['desc']]);
+								$deptname  = strtolower($dept_name);
+									if(!empty($_GET['stock'])){
+										echo '<a href="products/'.$gender_name.'/'.$deptname.'/'.$value['item_id'].'"><img class="lazy" data-original="'.$small_link.''.$value['item_id'].'a.jpg" src="img/loading.gif" alt=""></a>';
+									}else{
+										echo '<a href="product/'.$gender_name.'/'.$deptname.'/'.$value['item_id'].'"><img class="lazy" data-original="'.$small_link.''.$value['item_id'].'a.jpg" src="img/loading.gif" alt=""></a>';
+									}
+								?>
+							</div>
+							<div class="thumbSetting">
+								<div class="yasen">
+									<?php
+									if(!empty($_GET['stock'])){
+										$q = "SELECT warehouses.item_id , sum(warehouses.qty) as qty
+										  FROM `warehouses`
+										  JOIN `items`      ON items.item_id = warehouses.item_id
+										  JOIN `items_dept` ON items_dept.dept_id = items.dept_id
+										  WHERE items.gender_id IN ( 3, 5, 6 )
+										  AND warehouses.wrhs_id IN (20,21,22,23,25,26,28,30,32,38,40,44,47)
+									      AND warehouses.size_id NOT IN (0 , 1)
+									      AND warehouses.item_id = :id
+										  GROUP BY warehouses.item_id
+										  ORDER BY warehouses.item_id ASC";
+										$sql = $db1->query($q);
+										$db1->bind(":id", $value['item_id']);
+										$sql = $db1->execute();
+										$results = $db1->fetchAll(PDO::FETCH_ASSOC); 
+										if(!empty($results)){
+											foreach($results as $ress){
+												if($ress['qty'] > 5){
+													echo '<div class="available_online">Available online</div>';
+												}else{
+													echo '<div class="available_store">Reserve in store</div>';
+												}
+											}
+										}else{
+											echo '<div class="available_store">Reserve in store</div>';
+										}
+									}else{
+									?>
+										<div class="available_online">Available online</div>
+									<?php
+									}
+									?>
+								</div>
+								<div class="product-desc">
+									<p><?php echo $lang[$value['desc']] ?></p>
+								</div>
+								<div class="thumbTitle"> 
+									<h3>
+									<span class="invarseColor" style="font-family: Arial, Tahoma sans-serif;"><?php echo $value['item_id']; ?><?php echo $value['wrhs_id']; ?></span>
+									<?php if($value['msrp'] != $value['rtp']): ?>
+										<span class="label label-info"><?php echo $lang['SALE'] ?></span>
+									<?php endif; ?>
+									</h3>
+								</div>
+								<div class="thumbPrice">
+									<input type="hidden" id="flag" value="<?php echo $value['gender_id'] ?>">
+									<?php if($value['msrp'] != $value['rtp']): ?>
+									<span><span class="strike-through"><?php echo $value['msrp'] ?></span><span class="after_sale"><?php echo $value['rtp'] ?></span></span>
+									<?php else: ?>
+									<span class="noSale"><?php echo $value['msrp'] ?></span>
+									<?php endif; ?>
+								</div>
+
+								<div class="thumbButtons">
+									<?php
+									if(!empty($_GET['stock'])){
+										echo '<button rel="'.$value['item_id'].'" class="quickViews btn btn-primary btn-small btn-block">
+												'.$lang['QUICK_VIEW'].'
+												</button>';
+									}else{
+										echo '<button rel="'.$value['item_id'].'" class="quickView btn btn-primary btn-small btn-block">
+												'.$lang['QUICK_VIEW'].'
+												</button>';
+									}
+									?>
+								</div>
+							</div>
+						</li>
+						<?php
+						}  
+					}
+						?>
+						
+					<?php endforeach; ?>
+					<?php }else{ ?>
+					<div class='alert alert-error'>
+						<button type='button' class='close' data-dismiss='alert'>&times;</button>
+						<h4><?php echo $lang['OH_WE_ARE_SO_SORRY'] ?></h4>
+						<?php echo $lang['THERE_IS_NO_PRODUCT_THAT_MATCHES_THE_SEARCH_CRITERIA'] ?>.
+					</div>
+					<?php } ?>
+				</ul>
+			</div><!--end row-->
+
+		</div><!--end span9-->
+
+	</div><!--end row-->
+
+</div><!--end conatiner-->
+
+<div style='display:none'>
+	<div id="showItem"></div>
+</div>
+
+<?php include '_inc/footer.php' ?>
