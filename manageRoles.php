@@ -70,7 +70,7 @@
 				<ul class="checkbox-grid">
 				<?php $permByType = roleClass::getPermissionsByType($key2) ?>
 				<?php foreach ($permByType as $key3 => $value3): ?>
-					<li><input type="checkbox" name="selPerm" class="selPerm"><?php echo $value3 ?></li>
+					<li><input type="checkbox" name="selPerm" class="selPerm" value="<?php echo $key3 ?>"><?php echo $value3 ?></li>
 				<?php endforeach; ?>
 				</ul>
 				<br>

@@ -1,13 +1,19 @@
 <?php
+	// error_reporting(E_ALL);
+	// ini_set('display_errors', 1);
 	require_once ("_inc/dbClass.php");
 	require_once("_inc/userClass.php");
 	require_once("_inc/sessionClass.php");
+	require_once("_inc/roleClass.php");
 
 	if (!$session->is_logged_in()) {
 	  header("location: login.php");
 	}
 
 	$locId  = $_SESSION['loc_id'];
+	$roleId = $_SESSION['role_id'];
+	$permissions = roleClass::getRolePerms($roleId);
+	print_r($permissions);
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +27,7 @@
 <body class="bgSelWinLogin">
 	<div id="loadingWrapper"><img src="_img/ajax-loader.gif" id="loading"></div>
 	<div id="topMenu">
-		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "5" || $_SESSION['role_id'] == "2"): ?>
+		<?php if ($roleId == "4" || $roleId == "5" || $roleId == "2"): ?>
 		<a href="admin.php" class="topLink"><img src="_img/btn-admin.png"><span>Admin Area</span></a>
 		<?php endif; ?>
 		<?php switch ($_SESSION['job_id']) {
@@ -85,50 +91,12 @@
 	</div>
 	<img title="RAViN Logo" src="_img/logo.png" style="display: block; margin: 30px auto;">
 	<ul id="selectWindow">
-		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "1"
-		|| $_SESSION['role_id'] == "stockadmin" || $_SESSION['role_id'] == "5"): ?>
-		<li><a href="salesBox.php" target="_blank"><img src="_img/btn-sales.png"><br><br><br>Sales (F2)</a></li>
-		<?php if ($_SESSION['loc_id'] == 44): ?>
-		<li><a href="returnBox2.php" target="_blank"><img src="_img/btn-return.png"><br><br><br>Return (F3)</a></li>
-		<?php else: ?>
-		<li><a href="returnBox.php" target="_blank"><img src="_img/btn-return.png"><br><br><br>Return (F3)</a></li>
-		<?php endif; ?>
-		<li><a href="exchangeBox.php" target="_blank"><img src="_img/btn-exchange.png"><br><br><br>Exchange (F4)</a></li>
-		<li><a href="transferBox.php" target="_blank"><img src="_img/btn-transfer.png"><br><br><br>Transfer (F6)</a></li>
-		<?php endif; ?>
-		<li><a href="eodReport.php" target="_blank"><img src="_img/btn-eod-report.png"><br><br>End of Day<br>Report</a></li>
-		<li><a href="stockReport.php" target="_blank"><img src="_img/btn-stock-report.png"><br><br><br>Stock Report</a></li>
-		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "2" || $_SESSION['loc_id'] == 50 || $_SESSION['loc_id'] == 51 || $_SESSION['loc_id'] == 65 || $_SESSION['loc_id'] == 44): ?>
-		<li><a href="invoicesReport.php" target="_blank"><img src="_img/btn-invoices.png"><br><br>Invoices<br>Report</a></li>
-		<?php endif; ?>
-		<li><a href="inventoryReport.php" target="_blank"><img src="_img/btn-inventory.png"><br><br>Inventory<br>Report</a></li>
-		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "2" || $_SESSION['loc_id'] == 50 || $_SESSION['loc_id'] == 51 || $_SESSION['loc_id'] == 65 || $_SESSION['loc_id'] == 55 || $_SESSION['loc_id'] == 44): ?>
-		<li><a href="historyReport.php" target="_blank"><img src="_img/btn-history.png"><br><br>Item History<br>Report</a></li>
-		<?php endif; ?>
-		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "1" || $_SESSION['role_id'] == "stockadmin" || $_SESSION['role_id'] == "5"): ?>
-		<li><a href="sizeSwap.php" target="_blank"><img src="_img/btn-sizeSwap.png"><br><br><br>Size Swap</a></li>
-		<!-- <li><a href="saleBarcode.php" target="_blank"><img src="_img/btn-sale-barcode.png"><br><br><br>Sale Barcode</a></li> -->
-		<?php endif; ?>
-		<li><a href="changePassword.php" target="_blank"><img src="_img/btn-change-password.png"><br><br>Change<br>Password</a></li>
-		<?php if ($_SESSION['role_id'] == "4" || $_SESSION['role_id'] == "2"): ?>
-		<li><a href="fullReport.php"><img src="_img/btn-full-report.png"><br><br><br>Full Report</a></li>
-		<?php endif; ?>
-		<?php if ($_SESSION['role_id'] == "stockadmin"): ?>
-		<li><a href="addItemLocation.php"><img src="_img/btn-change-item-location.png"><br><br>Add Item<br>Location</a></li>
 		<?php
-			$userId = $_SESSION['user_id'];
-			$result = $db->query("SELECT `zone_id` FROM wh_users
-								  WHERE user_id = {$userId}");
-			if (mysql_num_rows($result) > 0)
-			{
-				while ($row = $db->fetch_array($result))
-				{
-					echo '<li><a href="zone.php?zoneId='.$row['zone_id'].'"><img src="_img/btn-zone.png"><br><br><br>Zone '.userClass::getZoneName($row['zone_id']).'</a></li>';
-				}
+			foreach ($permissions as $key => $value) {
+				print_r($value);
 			}
 		?>
 	</ul>
-	<?php endif; ?>
 	<!-- This contains the hidden content for inline calls -->
 	<div style='display:none'>
 		<div id='fullReportType' style='padding:10px; background:#fff;text-align:center;'>

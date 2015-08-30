@@ -14,12 +14,13 @@ class roleClass {
     public static function getRolePerms($role_id) {
         global $db;
         $role = new roleClass();
-        $sql = "SELECT t2.perm_desc, t2.perm_type FROM role_perm as t1
+        $sql = "SELECT t2.perm_desc, t2.perm_full_desc, t2.perm_type_id
+                FROM role_perm as t1
                 JOIN permissions as t2 ON t1.perm_id = t2.perm_id
                 WHERE t1.role_id = {$role_id}";
         $sth = $db->query($sql);
         while($row = mysql_fetch_assoc($sth)) {
-            $role->permissions[$row["perm_desc"]] = $row["perm_type"];
+            $role->permissions[] = $row;
         }
         return $role;
     }
